@@ -31,6 +31,7 @@ ubuntu_trusty/mariadb-galera    latest              63ff6a4fd348        2 hours 
 ```
 
 - Connect to docker image
+
 Install nsenter, a little Linux tool to fiddle with namespaces and enter them, usually provided by util-linux.
 ```
 #wget https://www.kernel.org/pub/linux/utils/util-linux/v2.27/util-linux-2.27.tar.gz
