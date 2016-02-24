@@ -31,8 +31,7 @@ ubuntu_trusty/mariadb-galera    latest              63ff6a4fd348        2 hours 
 ```
 
 - Connect to docker image
--- Install nsenter
-a little Linux tool to fiddle with namespaces and enter them, usually provided by util-linux.
+Install nsenter, a little Linux tool to fiddle with namespaces and enter them, usually provided by util-linux.
 ```
 #wget https://www.kernel.org/pub/linux/utils/util-linux/v2.27/util-linux-2.27.tar.gz
 #tar zxf util-linux-2.27.tar.gz
@@ -42,7 +41,7 @@ a little Linux tool to fiddle with namespaces and enter them, usually provided b
 #chmod +x nsenter
 #sudo cp nsenter /usr/local/bin
 ```
--- Enter containter
+Enter containter
 ```
 #sudo docker ps
 43b6db863782        ubuntu_trusty/mariadb-galera                                       "/bin/bash"            2 hours ago         Up 2 hours          3306/tcp, 4444/tcp, 4567-4568/tcp   mariadb3            
@@ -54,9 +53,10 @@ f1db2870c06e        ubuntu_trusty/mariadb-galera                                
 root@02aaffd533b6:/#
 ```
 
--Configure Mariadb Cluster
-```
+- Configure Mariadb Cluster
+
 On containter mariadb1:
+```
 root@02aaffd533b6:/#cat /proc/mounts > /etc/mtab
 root@02aaffd533b6:/#vi /etc/mysql/my.cnf
 wsrep_cluster_address=gcomm://172.17.75.118,172.17.75.120,172.17.75.121
@@ -64,8 +64,9 @@ root@02aaffd533b6:/#service mysql restart
  * Stopping MariaDB database server mysqld         [ OK ] 
  * Starting MariaDB database server mysqld         [ OK ] 
  * Checking for corrupt, not cleanly closed and upgrade needing tables.
-
-On containter mariadb2/3, repeat above, and
+```
+On containter mariadb2/3, repeat above, and any one of the three containters, for example mariadb3:
+```
 root@43b6db863782:/#mysql -uroot -proot
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
 Your MariaDB connection id is 30
