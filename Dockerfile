@@ -7,7 +7,7 @@
  # update apt
  RUN apt-get -q -y update 
  # install software-properties-common for key management
- RUN apt-get -q -y install software-properties-common 
+ RUN apt-get -q -y install software-properties-common wget
  # add the key for Mariadb Ubuntu repos
  RUN apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xcbcb082a1bb943db 
  # add the MariaDB repository for 5.5
@@ -20,6 +20,13 @@
  RUN echo mariadb-galera-server-5.5 mysql-server/root_password_again password root | debconf-set-selections 
  # install the necessary packages
  RUN LC_ALL=en_US.utf8 DEBIAN_FRONTEND=noninteractive apt-get -o Dpkg::Options::='--force-confnew' -qqy install mariadb-galera-server galera mariadb-client
+ 
+ # install Percona XtraBackup and dependency
+ RUN wget https://repo.percona.com/apt/percona-release_0.1-3.$(lsb_release -sc)_all.deb && \
+   dpkg -i percona-release_0.1-3.$(lsb_release -sc)_all.deb && \
+ RUN apt-get update
+ RUN DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends percona-xtrabackup-24 socat
+ 
  # upload the locally created my.cnf (obviously this can go into the default MariaDB path
  ADD ./my.cnf /etc/mysql/my.cnf
  # startup the service - this will fail since the nodes haven't been configured on first boot
